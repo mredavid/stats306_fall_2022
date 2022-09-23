@@ -1,6 +1,6 @@
 ---
 title: "Stats 306, Fall 2022, Homework 1"
-author: "Your Name, Your Uniqname"
+author: "Michael Redavid, mredavid"
 date: "Due Sept 18, 11:59PM EST"
 output: html_document
 ---
@@ -38,7 +38,12 @@ line arguments) to retrieve your `user.name` and `user.email`.
 Put a copy of your session here:
 
 ```
-
+Mikeys-MacBook-Air:stats306_fall_2022 mredavid$ git config --global user.name "mredavid"
+Mikeys-MacBook-Air:stats306_fall_2022 mredavid$ git config --global user.email "mredavid@umich.edu"
+Mikeys-MacBook-Air:stats306_fall_2022 mredavid$ git config --global user.name 
+mredavid
+Mikeys-MacBook-Air:stats306_fall_2022 mredavid$ git config --global user.email
+mredavid@umich.edu
 ```
 ### Using the log
 
@@ -49,10 +54,10 @@ move pages. Hit 'q' to quit.
 
 For the most recent commit, fill out the following information:
 
-* Commit id:
-* Author:
-* Date:
-* Message:
+* Commit id: b0bbc84c31a2d3a912ccd14e524c1df01728e5dc
+* Author: Mark Fredrickson <mark.m.fredrickson@gmail.com>
+* Date: Wed Sep 21 15:11:50 2022 -0400
+* Message: lec6: adding an exercise and moving an exercise early in the slides
 
 Commit ids are usually very long, but you really only need the first 5 or so
 characters to identify them. Verify this using `git show --name-only FULLID` and
@@ -63,12 +68,17 @@ The `git show` commands provides the details on the commit beyond just the log
 info. Use `git show --name-only 14e2c4b` (you can also use your previous commit
 if you already started this question).  What files where changed in this commit?
 
-> YOUR ANSWER
+> The following file was changed in this commit:
+
+commit 14e2c4bdad81d3bddc3db6f60482e6f17f293c06
+Author: Jesse Wheeler PC <jeswheel@umich.edu>
+Date:   Mon Sep 5 10:08:03 2022 -0400
+Added lab*_files to .gitignore, to ignore images
 
 Run `git show FIRSTFIVE`. What do you think this is telling you? What do you
 think a line with a `+` means? What would a `-` mean?
 
-> YOUR ANSWER
+> A line with a '+' means it is being added to the repository, and the '-' means it is being pulled from the local machine. 
 
 
 ### Commiting to your local repository

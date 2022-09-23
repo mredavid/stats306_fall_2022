@@ -90,7 +90,19 @@ By this point you have made some changes to this file. Save the file.
 
 Go to the *Terminal* and type `git status`. What is this telling your?
 
-> YOUR ANSWER
+> Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   homework/homework1.Rmd
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   homework/homework1.Rmd
+        
+  This is telling me which file was changed and which changes need to be committed. 
 
 Use `git add` to place your changes in the staging area. Type `git status` again
 to see what happened.
@@ -102,14 +114,20 @@ Now add your homework back to the staging area and commit it with `git commit -m
 "A COMMIT MESSAGE"`. What was the commit ID of your changes?
 
 ```
-
+main 6e1f5e2
 ```
 
 Demonstrate that you had a commit message using `git show --name-only HEAD` and
 putting the results below. `HEAD` is shorthand for "the most recent commit".
 
 ```
+commit 6e1f5e2bba99250bc0e2ef4adfa92ae932cc0cd5 (HEAD -> main)
+Author: mredavid <mredavid@umich.edu>
+Date:   Fri Sep 23 16:15:34 2022 -0400
 
+    committing changes on hw1
+
+homework/homework1.Rmd
 ```
 
 If you forgot to include a commit message the first time, you can **amend**
@@ -122,7 +140,7 @@ if you left them out of your staging area.
 In the following box, write a sentence with a spelling or grammar mistake.
 
 ```
-
+My day was vry good.
 ```
 
 Use `git add` and `git commit` to commit this change. Include the commit ID:

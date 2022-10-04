@@ -24,26 +24,26 @@ Type `ls` ("ell-ess"). This lists the files in the current directory. A useful o
 
 Use `ls -F`. What are the names of the directories in our main repository directory? Replace (and perhaps add) to the bullet points below:
 
-* LICENSE
-* README.md
+* Directory name
+* Directory name
 
 The command `cd` causes the terminal to change it's current directory. Type `cd lectures` to move into the `lectures` folder. Type `pwd` to verify that you have made this change.
 
 It can be useful to limit the output of `ls` to only certain kinds of files. Type `ls` to see the files. Type `ls *.Rmd`. What did adding the `*.Rmd` do?
 
-> The '*.Rmd' showed which files in the lectures folder were R files. 
+> ANSWER
 
 Create a file in this directory using the command `echo "hello" > hello.txt"`. Use `ls` to verify you created the file.
 
 Type `git status`. What does it tell you about your file `hello.txt`? You don't have to do it, but what would happen if you used `git commit` right now? Would `hello.txt` be included in your commit?
 
-> hello.txt would not be included in my commit, since it is an untracked file. 
+> ANSWER
 
 There is a special file called `..` that exists in every directory (except for the root directory of the filesystem). This special `..` represents the previous directory in the hierarchy. Use `cd ..` to get back to main repository directory.
 
 Type `git status` again. Is the message the same as before? What is git telling you about the location of the `hello.txt` file?
 
-> It states that the hello.txt file is in the lectures folder. 
+> ANSWER
 
 If you need to jump back to your main repository directory, you can use the Terminal drop down menu and select "Go to Current Directory".
 
@@ -67,27 +67,11 @@ Description from the City of Detroit Open Data Portal:
 Answer the following questions about the data set:
 
 * How many rows and columns are in this data set?
-```{r rowscolumns}
-dim(crime)
-```
-There are 467,725 rows in this data set and 24 columns.
 * Which column gives the most easily understood definition of the crime committed?
-```{r crimecommitted}
-head(crime)
-```
-The column offense_description gives the most easily understood definition of the crime committed.
 * How may precincts are there?
-```{r precincts}
-unique(crime$precinct)
-```
-There are 15 total precincts in this data set.
 
 Plot the number of crimes group by day of the week. Assuming that Monday is 1, Tuesday 2, etc., would you say that criminals take the weekend off?
-```{r numcrimesbyday}
-crime %>% ggplot(aes(x = day_of_week)) + geom_bar()
-```
 
-Criminals do not take the weekend off, where every day of the week appears to be fairly consistent in their number of crimes.
 ### When do crimes occur? (3 points)
 
 The `cut` function is useful for breaking up a quantitative variable into discrete categories. Here is an example:
@@ -114,49 +98,27 @@ Using the `cut` function and `mutate`, make a new column that breaks the day int
 * Night (10pm to 6am)
 * Early Day (6am to 2pm)
 * Late Day (2pm to 10pm)
-```{r}
-cut(crime$hour_of_day, breaks = c(-Inf, 6, 14, 22, Inf), labels = c("Night", "Early Day", "Late Day", "Night"))
-crime %>% mutate(crime, time_of_day = cut(crime$hour_of_day, breaks = c(-Inf, 6, 14, 22, Inf), labels = c("Night", "Early Day", "Late Day", "Night")))
-```
-
 
 (Hints: `hour_of_day` is on a 24 clock, to capture all the observations, make the first `breaks` value strictly less than 0).
 
 Using `group_by` and `summarize`, find the most common period of the day for a crime to occur.
 
-```{r mostcommonperiod}
-crime %>% mutate(crime, time_of_day = cut(crime$hour_of_day, breaks = c(-Inf, 6, 14, 22, Inf), labels = c("Night", "Early Day", "Late Day", "Night"))) %>% group_by(time_of_day) %>% summarise(count = n())
-```
-The most common time of day for a crime to occur is at night.
-
 ### Common Crimes by Zip Code (2 points)
 
 Grouping first by `zip_code` and then by `offense_cateogry`, count up the number of kinds of crimes in each zip code (hint: recall the `n()` function).
-```{r}
-crime %>% group_by(zip_code, offense_category) %>% summarize(count = n()) %>% arrange(zip_code, desc(count)) %>% summarize(first(offense_category))
-```
 
 Use `arrange` to sort the data within zip code by the number of crimes of each type in descending order. Use the `first` function inside of `summarize` to find the most common crime in each zip code. 
 
 At this point, you should have a table of zip codes with their most common crime. Group by the crime type to see what types of crime are common. What is the most common crime? Are other crimes also frequent across the zip codes?
 
-
-Assault seems to be the most common crime across the zip codes. Larceny is also another common crime in this area among zip codes.
-
-
 ### Mapping homicide events (2 points)
 
 Use `filter` to create the table `homicide` that only includes events with `offense_cateogry` equal to `"HOMICIDE"`. 
-```{r homocide}
-homicide <- crime %>% filter(offense_category == "HOMICIDE") 
-```
-
 
 Next, we need to create a bounding box for our data. Use `summarize` to find the minimum longitude, minimum latitude, maximum longitude, and maximum latitude (in that order). Then set the next block to `eval = TRUE`.
 
-
-```{r eval = TRUE}
-bbox <- homicide %>% summarize(min_longitude = min(longitude), min_latitude = min(latitude), max_longitude = max(longitude), max_latitude = max(latitude)) |> as.numeric()
+```{r eval = FALSE}
+bbox <- SUMMARIZE_HERE |> as.numeric()
 detroit_map <- get_map(bbox, zoom = 11, maptype = "roadmap")
 ggmap(detroit_map) + geom_point(data = homicide, mapping = aes(x = longitude, y = latitude))
 ```
@@ -176,14 +138,8 @@ midpointcut <- function(x, breaks) {
 * Use the `midpointcut` function to break up `latitude` in to 30 bins. Likewise, cut up `longitude` into 30 bins as well.
 * `group_by` both cuts and count how many observations fall into each category.
 * Create a new map plot using the count data, making the size of the dot equal to the count.
-```{r 2dhistogram}
-midpointhomicide <- group_by(homicide, latitude = midpointcut(x = latitude, 30), longitude = midpointcut(longitude, 30)) %>% summarize(count = n())
-ggmap(detroit_map) + geom_point(data = midpointhomicide, mapping = aes(x = longitude, y = latitude), size = midpointhomicide$count)
-```
 
 Do you notice any regions that seem more dangerous than others?
-
-Some regions definitely seem more dangerous than others, especially in the Northeast and Northwest areas of Detroit. The bigger circles represent more deaths in that area, and there seems to be this situation scattered all over Northern Detroit.
 
 ## Question 3 (5 points)
 
@@ -193,32 +149,9 @@ Let's practice writing our own functions.
 
 Write a function that will compute the 90% quantile of a vector (see `quantile`). Demonstrate on the `mpg` data set by summarizing the 90% quantiles of `cty` and `hwy` within manufacturers.
 
-```{r}
-quantile90pct <- function(x){
-  return(quantile(x, probs = 0.9))
-}
-manufacturermpg <- mpg %>% group_by(manufacturer)
-quantile90pct(manufacturermpg$cty)
-quantile90pct(manufacturermpg$hwy)
-
-
-```
-
-
 ### Predicates (2 points)
 
 Write a predicate function (`positive`) that returns true if all values in a vector are strictly positive.
-```{r}
-positive <- function(x){
-  if (any(x < 0)){
-    return(FALSE)
-  }
-  else{
-    return(TRUE)
-  }
-}
-positive(c(0.1, 2, -3, 4, 5))
-```
 
 Demonstrate your predicate using `select` on this data set:
 
@@ -226,29 +159,9 @@ Demonstrate your predicate using `select` on this data set:
 set.seed(30303222)
 n <- 100
 d <- tibble(x = runif(n), y = runif(n, -1, 1), z = rnorm(100)^2, w = log(runif(n)))
-select(d, where(positive))
 ```
 
 Write a predicate (`no_outliers`) that returns true if all observations are within 3 standard deviations of the mean.
-
-```{r no_outliers}
-no_outliers <- function(x){
-  if (any(x > mean(x) + (3*sd(x)))){
-    return(FALSE)
-  }
-  else if (any(x < mean(x) - (3*sd(x)))){
-    return(FALSE)
-  }
-  else{
-    return(TRUE)
-  }
-}
-practice <- c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,110)
-mean(practice)
-sd(practice)
-no_outliers(d$x)
-no_outliers(d$y)
-```
 
 ### `summary` using `summarize` (2 points)
 
@@ -261,19 +174,6 @@ The `summary` method for tables will provide the following information for numer
 * 3rd quantile
 * maximum
 * Number of missing observations
-```{r summary}
-summary_using_summarize <- function(argument){
-    tibble (
-    minimum = min(argument, na.rm = TRUE),
-    first_quartile = quantile(argument, 0.25, na.rm = TRUE),
-    median = quantile(argument, 0.5, na.rm = TRUE),
-    average = mean(argument, na.rm = TRUE),
-    third_quartile = quantile(argument, 0.75, na.rm = TRUE),
-    maximum = max(argument, na.rm = TRUE),
-    number_of_missing_observations = sum(is.na(argument))
-    )
-}
-```
 
 (Note: when there are missing observations, the other quantities are calculated with `na.rm = TRUE` as an argument to various calculations).
 
@@ -282,9 +182,5 @@ Demonstrate your function on the following data. Your result does not have to ha
 d2 <- d
 d2[10, 1] <- NA
 d2[50:70, 2] <- NA
-summarize(d2, summary_using_summarize(x))
-summarize(d2, summary_using_summarize(y))
-summarize(d2, summary_using_summarize(z))
-summarize(d2, summary_using_summarize(w))
 summary(d2)
 ```
